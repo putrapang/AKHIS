@@ -75,6 +75,7 @@
 										<td><?= $pasien['nama_resep']?></td>
 										<td><?= $pasien['created_at']?></td>
 									</tr>
+									fsgwhjk
 									<?php endforeach; ?>
 								</tbody>
 							</table>
