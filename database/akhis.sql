@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 31 Okt 2021 pada 14.55
+-- Waktu pembuatan: 05 Nov 2021 pada 10.41
 -- Versi server: 10.4.18-MariaDB
--- Versi PHP: 7.4.16
+-- Versi PHP: 8.0.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -75,6 +75,14 @@ CREATE TABLE `chat` (
   `status` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `chat`
+--
+
+INSERT INTO `chat` (`id`, `id_LC`, `pesan`, `dari`, `kepada`, `tanggal_dikirim`, `jam_dikirim`, `status`) VALUES
+(61, 37, 'halo', 32111001, 22111001, '2021-11-05', '14:14:06', 'dibaca'),
+(62, 37, 'iyaa keluhan anda apa', 22111001, 32111001, '2021-11-05', '14:14:53', 'dibaca');
+
 -- --------------------------------------------------------
 
 --
@@ -88,6 +96,13 @@ CREATE TABLE `detail_resep` (
   `Qty` int(11) NOT NULL,
   `aturan_minum` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `detail_resep`
+--
+
+INSERT INTO `detail_resep` (`id`, `id_resep`, `id_obat`, `Qty`, `aturan_minum`) VALUES
+(27, 22, 2, 1, 'sehari 1 kali');
 
 -- --------------------------------------------------------
 
@@ -127,6 +142,13 @@ CREATE TABLE `dokter` (
   `password` text NOT NULL,
   `status_online` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `dokter`
+--
+
+INSERT INTO `dokter` (`id_dokter`, `foto`, `nama_lengkap`, `jenis_kelamin`, `email`, `password`, `status_online`) VALUES
+(22111001, '1636096403.jpg', 'dr.pangestu', 'L', 'pangestu@gmail.com', '$2y$10$dsgY/gwFy/FLhVhUc6mwUecI5hXDCseWOUz6XrVFKw1jR3WDADVhC', 'offline');
 
 -- --------------------------------------------------------
 
@@ -181,6 +203,13 @@ CREATE TABLE `live_chat` (
   `terakhir_chat` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `live_chat`
+--
+
+INSERT INTO `live_chat` (`id_LC`, `id_pasien`, `id_dokter`, `terakhir_chat`) VALUES
+(37, 32111001, 22111001, '2021-11-05 14:14:54');
+
 -- --------------------------------------------------------
 
 --
@@ -229,6 +258,14 @@ CREATE TABLE `pasien` (
   `status_online` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `pasien`
+--
+
+INSERT INTO `pasien` (`id_pasien`, `nama_lengkap`, `jenis_kelamin`, `tanggal_lahir`, `alamat`, `no_hp`, `email`, `password`, `foto`, `status_online`) VALUES
+(32111001, 'putra pangestu', '', '2001-10-17', '<p>semanan</p>', '082121212', 'putra@gmail.com', '$2y$10$FM3IHjZNdD5RTCeowMRk7OO17UU1HCEQ/LuTsruvt4UAQpgsatDKy', 'default-L.png', 'online'),
+(32111002, 'fatur', '', '0000-00-00', '', '', 'fatur@gmail.com', '$2y$10$PiTMYCZDGqZZmRRDiNoV4OAA06/8nPrC8fRs1bJzf9GaGyQ3ZU6hG', 'default-L.png', '');
+
 -- --------------------------------------------------------
 
 --
@@ -260,6 +297,13 @@ CREATE TABLE `pesanan` (
   `no_resi` varchar(35) DEFAULT 'belum dikirim'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data untuk tabel `pesanan`
+--
+
+INSERT INTO `pesanan` (`invoice`, `id_resep`, `status`, `no_resi`) VALUES
+('210511021115', 22, 'menunggu pembayaran', 'belum dikirim');
+
 -- --------------------------------------------------------
 
 --
@@ -273,6 +317,26 @@ CREATE TABLE `resep` (
   `id_dokter` int(11) NOT NULL,
   `id_pasien` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data untuk tabel `resep`
+--
+
+INSERT INTO `resep` (`id_resep`, `nama_resep`, `created_at`, `id_dokter`, `id_pasien`) VALUES
+(22, 'panas', '2021-11-05', 22111001, 32111001);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in struktur untuk tampilan `v_cek_resep`
+-- (Lihat di bawah untuk tampilan aktual)
+--
+CREATE TABLE `v_cek_resep` (
+`id_resep` int(11)
+,`nama_lengkap` varchar(35)
+,`nama_resep` varchar(60)
+,`created_at` date
+);
 
 -- --------------------------------------------------------
 
@@ -312,6 +376,15 @@ CREATE TABLE `v_pesanan` (
 ,`alamat` text
 ,`no_hp` varchar(13)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Struktur untuk view `v_cek_resep`
+--
+DROP TABLE IF EXISTS `v_cek_resep`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_cek_resep`  AS SELECT `r`.`id_resep` AS `id_resep`, `p`.`nama_lengkap` AS `nama_lengkap`, `r`.`nama_resep` AS `nama_resep`, `r`.`created_at` AS `created_at` FROM (`resep` `r` join `pasien` `p` on(`r`.`id_pasien` = `p`.`id_pasien`)) ;
 
 -- --------------------------------------------------------
 
@@ -434,13 +507,13 @@ ALTER TABLE `resep`
 -- AUTO_INCREMENT untuk tabel `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT untuk tabel `detail_resep`
 --
 ALTER TABLE `detail_resep`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT untuk tabel `digital_payment`
@@ -458,7 +531,7 @@ ALTER TABLE `jenis_obat`
 -- AUTO_INCREMENT untuk tabel `live_chat`
 --
 ALTER TABLE `live_chat`
-  MODIFY `id_LC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_LC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT untuk tabel `obat`
@@ -476,7 +549,7 @@ ALTER TABLE `pembayaran`
 -- AUTO_INCREMENT untuk tabel `resep`
 --
 ALTER TABLE `resep`
-  MODIFY `id_resep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_resep` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
