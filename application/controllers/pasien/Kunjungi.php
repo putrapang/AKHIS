@@ -21,7 +21,6 @@ class Kunjungi extends CI_Controller {
     }
     public function pembayaran($id_pasien, $id_resep)
     {
-        //hahahaha
         $cek = $this->db->get_where('pasien', ['id_pasien' => $id_pasien])->row_array();
         if (!$cek['alamat']){
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
