@@ -66,7 +66,6 @@
 										<th>Nama Pasien</th>
 										<th>Nama Resep</th>
 										<th>Tanggal dibuat</th>
-										<th>Status</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -75,9 +74,6 @@
 										<td><?= $pasien['nama_lengkap'] ?></td>
 										<td><?= $pasien['nama_resep']?></td>
 										<td><?= $pasien['created_at']?></td>
-										<td>
-											<div class="badge rounded-pill bg-success w-100">Completed</div>
-										</td>
 									</tr>
 									<?php endforeach; ?>
 								</tbody>
