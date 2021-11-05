@@ -127,9 +127,6 @@ class Model_create extends CI_Model
                 $_POST += [
                     'bukti_bayar' => upload_foto('bukti_bayar', './assets/img/bukti_pembayaran'),
                 ];
-                var_dump(upload_foto('bukti_bayar', './assets/img/bukti_pembayaran'));
-                var_dump($_FILES);
-                die;
                 $data = [
                     'bukti_bayar' => $this->input->post('bukti_bayar'),
                     'dibayar_pada' => date('Y-m-d'),

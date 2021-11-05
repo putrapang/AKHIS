@@ -11,7 +11,7 @@ class Home extends CI_Controller {
 		$fileds = $this->db->list_fields('dokter');
 		$data['columns'] = array_slice($fileds, 1, 4);
 		$data['width'] = ['width: 10%','width: 50%','width: 5%','width: 45%'];
-		$data['pasien'] = $this->Model_read->ambilData('pasien');
+		$data['pasien'] = $this->Model_read->ambilData('v_cek_resep');
         $data['title'] = "Dashboard | Dokter";
 		$this->load->view('dokter/template/head', $data);
 		$this->load->view('dokter/template/header');
